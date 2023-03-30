@@ -13,18 +13,18 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<Transaction> _userTransactions = [
-    Transaction(
-      id: const Uuid(),
-      title: "New Shoe",
-      amount: 69.99,
-      date: DateTime.now(),
-    ),
-    Transaction(
-      id: const Uuid(),
-      title: "Dinner",
-      amount: 19.99,
-      date: DateTime.now(),
-    ),
+    // Transaction(
+    //   id: const Uuid(),
+    //   title: "New Shoe",
+    //   amount: 69.99,
+    //   date: DateTime.now(),
+    // ),
+    // Transaction(
+    //   id: const Uuid(),
+    //   title: "Dinner",
+    //   amount: 19.99,
+    //   date: DateTime.now(),
+    // ),
   ];
   void _addNewTransaction(String title, double amount) {
     final newTransaction = Transaction(
@@ -40,14 +40,12 @@ class _HomeState extends State<Home> {
 
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
-      
       context: context,
       builder: (buildContext) {
         return NewTransaction(
           addNewTransaction: _addNewTransaction,
         );
       },
-
     );
   }
 
@@ -55,7 +53,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Expense App"),
+        title: const Text("Expense Tracker"),
         actions: [
           IconButton(
               onPressed: () => {_startAddNewTransaction(context)},

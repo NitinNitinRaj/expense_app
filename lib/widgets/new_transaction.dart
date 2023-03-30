@@ -25,6 +25,8 @@ class _NewTransactionState extends State<NewTransaction> {
       return;
     }
     widget.addNewTransaction(title, amount);
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -40,6 +42,7 @@ class _NewTransactionState extends State<NewTransaction> {
               decoration: const InputDecoration(labelText: "Title"),
               controller: titleController,
               onSubmitted: (_) => submit(),
+              autofocus: true,
             ),
             TextField(
               decoration: const InputDecoration(labelText: "Amount"),
