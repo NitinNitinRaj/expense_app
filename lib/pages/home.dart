@@ -13,7 +13,50 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List<Transaction> _userTransactions = [];
+  final List<Transaction> _userTransactions = [
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Camera",
+      amount: 12.99,
+      date: DateTime.now(),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Mouse",
+      amount: 7.99,
+      date: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Shoe",
+      amount: 19.99,
+      date: DateTime.now().subtract(const Duration(days: 5)),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Bottle",
+      amount: 12.99,
+      date: DateTime.now().subtract(const Duration(days: 3)),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Lunch",
+      amount: 5.99,
+      date: DateTime.now().subtract(const Duration(days: 6)),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Coffee",
+      amount: 1.99,
+      date: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+    Transaction(
+      id: const Uuid().v1(),
+      title: "Football",
+      amount: 25.99,
+      date: DateTime.now().subtract(const Duration(days: 4)),
+    ),
+  ];
   List<Transaction> get _recentTransaction {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
