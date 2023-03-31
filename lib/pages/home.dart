@@ -1,7 +1,8 @@
 import 'package:expense_app/models/transaction.dart';
+import 'package:expense_app/widgets/Chart.dart';
 import 'package:expense_app/widgets/new_transaction.dart';
+import 'package:expense_app/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
-import 'package:expense_app/pages/body.dart';
 import 'package:uuid/uuid.dart';
 
 class Home extends StatefulWidget {
@@ -12,20 +13,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Transaction> _userTransactions = [
-    // Transaction(
-    //   id: const Uuid(),
-    //   title: "New Shoe",
-    //   amount: 69.99,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: const Uuid(),
-    //   title: "Dinner",
-    //   amount: 19.99,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  final List<Transaction> _userTransactions = [];
+  List<Transaction> get _recentTransaction {
+    return _userTransactions.where((tx) {
+      return tx.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
+    }).toList();
+  }
+
   void _addNewTransaction(String title, double amount) {
     final newTransaction = Transaction(
       id: const Uuid(),
@@ -65,7 +59,19 @@ class _HomeState extends State<Home> {
         child: const Icon(Icons.add),
         onPressed: () => {_startAddNewTransaction(context)},
       ),
-      body: Body(userTransactions: _userTransactions),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Chart(
+              recentTransactions: _recentTransaction,
+            ),
+            TransactionList(
+              userTransactions: _userTransactions,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
