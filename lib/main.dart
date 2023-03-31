@@ -24,6 +24,7 @@ class MainApp extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
+          labelLarge: const TextStyle(color: Colors.white),
         ),
   );
 

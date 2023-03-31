@@ -13,19 +13,19 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List<Transaction> _userTransactions = [];
+  List<Transaction> _userTransactions = [];
   List<Transaction> get _recentTransaction {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount) {
+  void _addNewTransaction(String title, double amount, DateTime pickedDate) {
     final newTransaction = Transaction(
-      id: const Uuid(),
+      id: const Uuid().v1(),
       title: title,
       amount: amount,
-      date: DateTime.now(),
+      date: pickedDate,
     );
     setState(() {
       _userTransactions.add(newTransaction);
@@ -41,6 +41,12 @@ class _HomeState extends State<Home> {
         );
       },
     );
+  }
+
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransactions.removeWhere((tx) => tx.id == id);
+    });
   }
 
   @override
@@ -67,6 +73,7 @@ class _HomeState extends State<Home> {
               recentTransactions: _recentTransaction,
             ),
             TransactionList(
+              deleteTransaction: _deleteTransaction,
               userTransactions: _userTransactions,
             ),
           ],
