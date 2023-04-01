@@ -1,3 +1,4 @@
 # expense_app
 
-A new Flutter project.
+In this Flutter App, you can track expenses throughout the week with charts that provide visualizations of the data.
+
