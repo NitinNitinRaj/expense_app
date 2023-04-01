@@ -178,11 +178,8 @@ class _HomeState extends State<Home> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Show Chart",
-                          style: TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold),
-                        ),
+                        Text("Show Chart",
+                            style: Theme.of(context).textTheme.titleLarge),
                         Switch.adaptive(
                             value: _showChart,
                             onChanged: (val) {

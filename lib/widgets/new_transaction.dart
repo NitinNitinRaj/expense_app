@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:expense_app/widgets/adaptive_elevated_button.dart';
+import 'package:expense_app/widgets/adaptive_text_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -86,27 +91,13 @@ class _NewTransactionState extends State<NewTransaction> {
                   const SizedBox(
                     width: 10,
                   ),
-                  TextButton(
-                    onPressed: _pickDate,
-                    child: const Text(
-                      "Choose Date",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  AdaptiveTextButton(text: "Choose Date", handler: _pickDate)
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
-              ElevatedButton(
-                onPressed: _submit,
-                child: const Text(
-                  "Add Transcation",
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
+              AdaptiveElevatedButton(text: "Add Transcation", handler: _submit)
             ],
           ),
         ),
