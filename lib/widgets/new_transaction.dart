@@ -24,7 +24,7 @@ class _NewTransactionState extends State<NewTransaction> {
     if (title.isEmpty || amount <= 0 || _pickedDate == null) {
       return;
     }
-    widget.addNewTransaction(title, amount,_pickedDate);
+    widget.addNewTransaction(title, amount, _pickedDate);
 
     Navigator.of(context).pop();
   }
@@ -47,61 +47,68 @@ class _NewTransactionState extends State<NewTransaction> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            TextField(
-              decoration: const InputDecoration(labelText: "Title"),
-              controller: _titleController,
-              onSubmitted: (_) => _submit(),
-              autofocus: true,
-            ),
-            TextField(
-              decoration: const InputDecoration(labelText: "Amount"),
-              controller: _amountController,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submit(),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: Text(_pickedDate == null
-                      ? "No Date Chosen!"
-                      : "Picked Date : ${DateFormat.yMd().format(_pickedDate!)}"),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                TextButton(
-                  onPressed: _pickDate,
-                  child: const Text(
-                    "Choose Date",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Container(
+          padding: EdgeInsets.only(
+            top: 10,
+            left: 10,
+            right: 10,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextField(
+                decoration: const InputDecoration(labelText: "Title"),
+                controller: _titleController,
+                onSubmitted: (_) => _submit(),
+                autofocus: true,
+              ),
+              TextField(
+                decoration: const InputDecoration(labelText: "Amount"),
+                controller: _amountController,
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onSubmitted: (_) => _submit(),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(_pickedDate == null
+                        ? "No Date Chosen!"
+                        : "Picked Date : ${DateFormat.yMd().format(_pickedDate!)}"),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  TextButton(
+                    onPressed: _pickDate,
+                    child: const Text(
+                      "Choose Date",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ElevatedButton(
-              onPressed: _submit,
-              child: const Text(
-                "Add Transcation",
-                style: TextStyle(fontSize: 16),
+                ],
               ),
-            )
-          ],
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                onPressed: _submit,
+                child: const Text(
+                  "Add Transcation",
+                  style: TextStyle(fontSize: 16),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
