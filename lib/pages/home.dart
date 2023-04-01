@@ -91,16 +91,71 @@ class _HomeState extends State<Home> {
           );
   }
 
-  SizedBox buildListView(
-      MediaQueryData mediaQuery, PreferredSizeWidget appBar) {
-    return SizedBox(
-      height: (mediaQuery.size.height -
-              appBar.preferredSize.height -
-              mediaQuery.padding.top) *
-          0.7,
-      child: TransactionList(
-        deleteTransaction: _deleteTransaction,
-        userTransactions: _userTransactions,
+  PreferredSizeWidget _buildAppBar() {
+    return (Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: const Text("Expense Tracker"),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                    onTap: () => {_startAddNewTransaction(context)},
+                    child: const Icon(CupertinoIcons.add))
+              ],
+            ),
+          )
+        : AppBar(
+            title: const Text("Expense Tracker"),
+            actions: [
+              IconButton(
+                  onPressed: () => {_startAddNewTransaction(context)},
+                  icon: const Icon(Icons.add))
+            ],
+          )) as PreferredSizeWidget;
+  }
+
+  Widget _pageBody(MediaQueryData mediaQuery, AppBar appBar, Widget listView,
+      bool isLandscape) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: isDesktop
+            ? Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: mediaQuery.size.width * 0.5,
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.3,
+                      child: Chart(
+                        recentTransactions: _recentTransaction,
+                      ),
+                    ),
+                    SizedBox(
+                      width: mediaQuery.size.width * 0.5,
+                      height: (mediaQuery.size.height -
+                              appBar.preferredSize.height -
+                              mediaQuery.padding.top) *
+                          0.7,
+                      child: TransactionList(
+                        deleteTransaction: _deleteTransaction,
+                        userTransactions: _userTransactions,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Column(
+                children: [
+                  if (!isLandscape)
+                    ..._buildPortraitContent(
+                        mediaQuery, appBar as AppBar, listView),
+                  if (isLandscape)
+                    ..._buildLandscapeContent(
+                        mediaQuery, appBar as AppBar, listView),
+                ],
+              ),
       ),
     );
   }
@@ -151,72 +206,17 @@ class _HomeState extends State<Home> {
     ];
   }
 
-  Widget _pageBody(MediaQueryData mediaQuery, AppBar appBar, Widget listView,
-      bool isLandscape) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: isDesktop
-            ? Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: mediaQuery.size.width * 0.5,
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.3,
-                      child: Chart(
-                        recentTransactions: _recentTransaction,
-                      ),
-                    ),
-                    SizedBox(
-                      width: mediaQuery.size.width * 0.5,
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.7,
-                      child: TransactionList(
-                        deleteTransaction: _deleteTransaction,
-                        userTransactions: _userTransactions,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : Column(
-                children: [
-                  if (!isLandscape)
-                    ..._buildPortraitContent(
-                        mediaQuery, appBar as AppBar, listView),
-                  if (isLandscape)
-                    ..._buildLandscapeContent(
-                        mediaQuery, appBar as AppBar, listView),
-                ],
-              ),
+  SizedBox buildListView(
+      MediaQueryData mediaQuery, PreferredSizeWidget appBar) {
+    return SizedBox(
+      height: (mediaQuery.size.height -
+              appBar.preferredSize.height -
+              mediaQuery.padding.top) *
+          0.7,
+      child: TransactionList(
+        deleteTransaction: _deleteTransaction,
+        userTransactions: _userTransactions,
       ),
     );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return (Platform.isIOS
-        ? CupertinoNavigationBar(
-            middle: const Text("Expense Tracker"),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                    onTap: () => {_startAddNewTransaction(context)},
-                    child: const Icon(CupertinoIcons.add))
-              ],
-            ),
-          )
-        : AppBar(
-            title: const Text("Expense Tracker"),
-            actions: [
-              IconButton(
-                  onPressed: () => {_startAddNewTransaction(context)},
-                  icon: const Icon(Icons.add))
-            ],
-          )) as PreferredSizeWidget;
   }
 }
