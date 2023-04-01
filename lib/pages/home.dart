@@ -4,6 +4,7 @@ import 'package:expense_app/widgets/new_transaction.dart';
 import 'package:expense_app/widgets/transaction_list.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
+import 'package:flutter/foundation.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -57,6 +58,9 @@ class _HomeState extends State<Home> {
       date: DateTime.now().subtract(const Duration(days: 4)),
     ),
   ];
+
+  bool _showChart = false;
+
   List<Transaction> get _recentTransaction {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
@@ -92,35 +96,118 @@ class _HomeState extends State<Home> {
     });
   }
 
+  final isDesktop = defaultTargetPlatform == TargetPlatform.windows || kIsWeb;
+
+  // final isWebMobile = kIsWeb &&
+  //     (defaultTargetPlatform == TargetPlatform.iOS ||
+  //         defaultTargetPlatform == TargetPlatform.android);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Expense Tracker"),
-        actions: [
-          IconButton(
-              onPressed: () => {_startAddNewTransaction(context)},
-              icon: const Icon(Icons.add))
-        ],
+    final appBar = AppBar(
+      title: const Text("Expense Tracker"),
+      actions: [
+        IconButton(
+            onPressed: () => {_startAddNewTransaction(context)},
+            icon: const Icon(Icons.add))
+      ],
+    );
+
+    final listView = SizedBox(
+      height: (MediaQuery.of(context).size.height -
+              appBar.preferredSize.height -
+              MediaQuery.of(context).padding.top) *
+          0.7,
+      child: TransactionList(
+        deleteTransaction: _deleteTransaction,
+        userTransactions: _userTransactions,
       ),
+    );
+
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    return Scaffold(
+      appBar: appBar,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => {_startAddNewTransaction(context)},
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Chart(
-              recentTransactions: _recentTransaction,
-            ),
-            TransactionList(
-              deleteTransaction: _deleteTransaction,
-              userTransactions: _userTransactions,
-            ),
-          ],
-        ),
+        child: isDesktop
+            ? Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.3,
+                      child: Chart(
+                        recentTransactions: _recentTransaction,
+                      ),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: TransactionList(
+                        deleteTransaction: _deleteTransaction,
+                        userTransactions: _userTransactions,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : Column(
+                children: [
+                  if (isLandscape)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          "Show Chart",
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        ),
+                        Switch(
+                            value: _showChart,
+                            onChanged: (val) {
+                              setState(() {
+                                _showChart = val;
+                              });
+                            })
+                      ],
+                    ),
+                  if (!isLandscape)
+                    SizedBox(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.3,
+                      child: Chart(
+                        recentTransactions: _recentTransaction,
+                      ),
+                    ),
+                  if (!isLandscape) listView,
+                  if (isLandscape)
+                    _showChart
+                        ? SizedBox(
+                            height: (MediaQuery.of(context).size.height -
+                                    appBar.preferredSize.height -
+                                    MediaQuery.of(context).padding.top) *
+                                0.7,
+                            child: Chart(
+                              recentTransactions: _recentTransaction,
+                            ),
+                          )
+                        : listView,
+                ],
+              ),
       ),
     );
   }
