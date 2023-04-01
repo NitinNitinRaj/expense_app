@@ -16,9 +16,26 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeState extends State<Home> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [];
   bool _showChart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
 
   List<Transaction> get _recentTransaction {
     return _userTransactions.where((tx) {
@@ -149,11 +166,9 @@ class _HomeState extends State<Home> {
             : Column(
                 children: [
                   if (!isLandscape)
-                    ..._buildPortraitContent(
-                        mediaQuery, appBar as AppBar, listView),
+                    ..._buildPortraitContent(mediaQuery, appBar, listView),
                   if (isLandscape)
-                    ..._buildLandscapeContent(
-                        mediaQuery, appBar as AppBar, listView),
+                    ..._buildLandscapeContent(mediaQuery, appBar, listView),
                 ],
               ),
       ),
