@@ -18,7 +18,6 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final List<Transaction> _userTransactions = [];
-
   bool _showChart = false;
 
   List<Transaction> get _recentTransaction {
