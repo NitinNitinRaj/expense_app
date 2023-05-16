@@ -1,5 +1,6 @@
 import 'package:expenses_app/models/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ExpensesItem extends StatelessWidget {
   const ExpensesItem(this.expense, {super.key});
@@ -23,7 +24,8 @@ class ExpensesItem extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.alarm),
-                    Text(expense.dateTime.toLocal().toString())
+                    const SizedBox(width: 5,),
+                    Text(DateFormat.yMMMd().format(expense.dateTime))
                   ],
                 )
               ],
