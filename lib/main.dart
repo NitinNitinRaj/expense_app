@@ -1,4 +1,4 @@
-import 'package:expense_app/pages/expenses.dart';
+import 'package:expenses_app/pages/expenses.dart';
 import 'package:flutter/material.dart';
 
 void main() {
